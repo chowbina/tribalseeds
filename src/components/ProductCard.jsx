@@ -2,20 +2,27 @@ import React, { useState } from 'react';
 import { Plus, CheckCircle, ShoppingBag } from 'lucide-react';
 import { useCart } from './CartContext';
 
-const ProductCard = ({ product }) => {
+const ProductCard = ({ product, onProductClick }) => {
   const { addToCart } = useCart();
   const [isAdded, setIsAdded] = useState(false);
 
-  const handleAddToCart = () => {
+  const handleAddToCart = (e) => {
+    e.stopPropagation();
     addToCart(product);
     setIsAdded(true);
     setTimeout(() => setIsAdded(false), 2000);
   };
 
+  const handleCardClick = () => {
+    if (onProductClick) {
+      onProductClick(product);
+    }
+  };
+
   return (
-    <div className="product-card fade-in">
+    <div className="product-card fade-in" onClick={handleCardClick}>
       <div className="product-image-container">
-        <div 
+        <div
           className="product-image"
           dangerouslySetInnerHTML={{ __html: product.image }}
         />
@@ -23,12 +30,12 @@ const ProductCard = ({ product }) => {
           {product.category}
         </div>
       </div>
-      
+
       <div className="product-info">
         <h3 className="product-name">{product.name}</h3>
         <p className="product-scientific">{product.scientificName}</p>
         <p className="product-description">{product.description}</p>
-        
+
         <div className="product-footer">
           <span className="product-price">₹{product.price}</span>
           <button

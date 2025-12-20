@@ -3,6 +3,7 @@ import { Search, CheckCircle, Heart, Package, Leaf, Star, TrendingUp } from 'luc
 import { CartProvider } from './components/CartContext';
 import Header from './components/Header';
 import ProductCard from './components/ProductCard';
+import ProductDetail from './components/ProductDetail';
 import CartSidebar from './components/CartSidebar';
 import { products } from './products';
 import './App.css';
@@ -47,6 +48,15 @@ const HeroSection = () => {
 const App = () => {
   const [currentCategory, setCurrentCategory] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedProduct, setSelectedProduct] = useState(null);
+
+  const handleProductClick = (product) => {
+    setSelectedProduct(product);
+  };
+
+  const handleCloseProductDetail = () => {
+    setSelectedProduct(null);
+  };
 
   const getFilteredProducts = () => {
     let allProducts = [];
@@ -95,7 +105,11 @@ const App = () => {
 
           <div className="products-grid">
             {filteredProducts.map(product => (
-              <ProductCard key={product.id} product={product} />
+              <ProductCard
+                key={product.id}
+                product={product}
+                onProductClick={handleProductClick}
+              />
             ))}
           </div>
 
@@ -155,9 +169,16 @@ const App = () => {
             </div>
           </div>
           <div className="footer-bottom">
-            © 2024 TribalSeeds. Preserving Nature's Heritage.
+            © 2026 TribalSeeds. Preserving Nature's Heritage.
           </div>
         </footer>
+
+        {selectedProduct && (
+          <ProductDetail
+            product={selectedProduct}
+            onClose={handleCloseProductDetail}
+          />
+        )}
 
         <CartSidebar />
       </div>
